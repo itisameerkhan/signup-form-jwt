@@ -1,0 +1,95 @@
+.register {
+  border: 2px solid #404040;
+  padding: 1rem 2rem;
+  width: 25rem;
+  // height: 27rem;
+  border-radius: 10px;
+  background-color: #303030;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-sizing: border-box;
+  color: white;
+}
+.title {
+  font-size: 1.8rem;
+}
+form {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: 1.2rem;
+    }
+    input {
+      height: 2.5rem;
+      outline: none;
+      border-radius: 10px;
+      padding: 1rem;
+      font-size: 1.2rem;
+      border:none;
+      border:1px solid #707070;
+    }
+  }
+}
+.password-div {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 40px;
+  }
+  span 
+  {
+    color:#404040;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+}
+.submit-btn {
+  height: 2.5rem;
+  margin-top: 1.2rem;
+  background-color: white;
+  color: black;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover 
+  {
+    background-color: #d2d2d2;
+  }
+}
+.switch 
+{
+    user-select: none;
+    span 
+    {
+        color: skyblue;
+        margin: 0 0.2rem;
+        cursor: pointer;
+    }
+}
+.register-main
+{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.error-message
+{
+  color: rgb(255, 81, 0);
+  text-align: center;
+}
