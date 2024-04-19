@@ -24,7 +24,9 @@ export const userRegister = async (req, res, next) => {
 
     const data = await Register.create(userData);
 
-    const jwtToken = jwt.sign({ data }, process.env.JWT_SECRET);
+    const jwtToken = jwt.sign({ data }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     // res.cookie("jwt", jwtToken, { httpOnly: true });
 
@@ -51,16 +53,16 @@ export const userLogin = async (req, res, next) => {
       throw new Error("Invalid Password");
     }
 
-    const jwtToken = jwt.sign({ data }, process.env.JWT_SECRET);
+    const jwtToken = jwt.sign({ data }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "login successfull",
-        data: data,
-        jwtToken: jwtToken,
-      });
+    res.status(200).json({
+      success: true,
+      message: "login successfull",
+      data: data,
+      jwtToken: jwtToken,
+    });
   } catch (err) {
     next(err);
   }
@@ -71,7 +73,11 @@ export const authenticateToken = async (req, res, next) => {
     const jwtToken = req.headers["authorization"].split(" ")[1];
     const jwtData = jwt.verify(jwtToken, process.env.JWT_SECRET);
     const mongoData = await Register.findOne({ email: jwtData.data.email });
-    res.json({ success: true, message: "authenication sucessfull", data: jwtData.data });
+    res.json({
+      success: true,
+      message: "authenication sucessfull",
+      data: jwtData.data,
+    });
   } catch (err) {
     next(err);
   }

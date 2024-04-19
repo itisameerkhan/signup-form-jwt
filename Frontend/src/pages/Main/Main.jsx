@@ -22,11 +22,20 @@ const Main = () => {
         },
       });
       console.log(response.data);
+      if(!response.data.success) {
+        localStorage.clear("jwtToken");
+        navigate("/");
+      }
       setUserData(response.data);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const handleClick = () => {
+    localStorage.clear("jwtToken");
+    navigate("/");
+  }
 
   useEffect(() => {
     getData();
@@ -36,6 +45,7 @@ const Main = () => {
       <h2>username: {userData?.data?.username}</h2>
       <h2>email: {userData?.data?.email}</h2>
       <h2>id: {userData?.data?._id}</h2>
+      <button onClick={handleClick}>signout</button>
     </div>
   );
 };
