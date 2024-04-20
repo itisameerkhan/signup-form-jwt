@@ -26,7 +26,6 @@ const Register = () => {
       );
       console.log(data.data);
 
-      
       if (!data.data.success) {
         setErrorMessage(data.data.errorMessage);
       } else {
