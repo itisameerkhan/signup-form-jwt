@@ -40,6 +40,7 @@ const Main = () => {
   useEffect(() => {
     getData();
   }, []);
+  
   return (
     <div className="main">
       <h2>username: {userData?.data?.username}</h2>
