@@ -2,6 +2,10 @@ import bcrypt from "bcryptjs";
 import Register from "../model/registerModel.js";
 import jwt from "jsonwebtoken";
 
+const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "15s" });
+};
+
 export const userRegister = async (req, res, next) => {
   const { username, email, password } = req.body;
   try {
@@ -22,12 +26,20 @@ export const userRegister = async (req, res, next) => {
       password: hashPassword,
     };
 
-    const data = await Register.create(userData);
+    const jwtToken = generateAccessToken(userData);
 
-    const jwtToken = jwt.sign({ data }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    // const jwtToken = jwt.sign({ userData }, process.env.JWT_SECRET, {
+    //   expiresIn: "1h",
+    // });
+
+    const jwtRefreshToken = jwt.sign(userData, process.env.JWT_REFRESH_SECRET);
+
+    const data = await Register.create({
+      username,
+      email: email,
+      password: hashPassword,
+      refreshToken: jwtRefreshToken,
     });
-
     // res.cookie("jwt", jwtToken, { httpOnly: true });
 
     res.status(200).json({
@@ -53,9 +65,11 @@ export const userLogin = async (req, res, next) => {
       throw new Error("Invalid Password");
     }
 
-    const jwtToken = jwt.sign({ data }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const userData = {
+      email,
+      password,
+    };
+    const jwtToken = generateAccessToken(userData);
 
     res.status(200).json({
       success: true,
@@ -68,17 +82,14 @@ export const userLogin = async (req, res, next) => {
   }
 };
 
-export const authenticateToken = async (req, res, next) => {
-  try {
-    const jwtToken = req.headers["authorization"].split(" ")[1];
-    const jwtData = jwt.verify(jwtToken, process.env.JWT_SECRET);
-    const mongoData = await Register.findOne({ email: jwtData.data.email });
-    res.json({
-      success: true,
-      message: "authenication sucessfull",
-      data: jwtData.data,
-    });
-  } catch (err) {
-    next(err);
-  }
+export const refreshToken = async (req, res) => {
+  console.log("req.body /refreshtoken" ,req.body);
+  const { username, email, password } = req.body;
+  // res.json(mongoData);
+  const jwtToken = generateAccessToken({ username, email, password });
+
+  res.json({
+    success: true,
+    jwtToken: jwtToken,
+  });
 };
