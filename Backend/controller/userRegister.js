@@ -3,7 +3,7 @@ import Register from "../model/registerModel.js";
 import jwt from "jsonwebtoken";
 
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "15s" });
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "12h" });
 };
 
 export const userRegister = async (req, res, next) => {
@@ -83,7 +83,7 @@ export const userLogin = async (req, res, next) => {
 };
 
 export const refreshToken = async (req, res) => {
-  console.log("req.body /refreshtoken" ,req.body);
+  console.log("req.body /refreshtoken", req.body);
   const { username, email, password } = req.body;
   // res.json(mongoData);
   const jwtToken = generateAccessToken({ username, email, password });
